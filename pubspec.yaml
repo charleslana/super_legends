@@ -1,0 +1,41 @@
+name: super_legends
+description: A new Flutter project.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  audioplayers: ^1.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.10.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+      - assets/images/characters/1/
+      - assets/images/characters/2/
+
+      - assets/images/maps/
+      
+      - assets/images/skill/1/
+
+      - assets/images/aura/1/
+
+      - assets/images/explosion/1/
+      
+      - assets/audio/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/images/app_icon.png         
