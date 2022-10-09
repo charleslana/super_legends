@@ -143,7 +143,6 @@ class _BattlePageState extends State<BattlePage> {
   #######################################
   */
   void playerAttack(int characterPosition) {
-    stopMovesAudio();
     attackAudio.play(AssetSource('audio/teleport_combo.ogg'));
     setState(() {
       disableActionButton = true;
@@ -161,6 +160,7 @@ class _BattlePageState extends State<BattlePage> {
     Timer.periodic(const Duration(milliseconds: 1800), (timer) {
       timer.cancel();
       attackCharacterTimer.cancel();
+      attackAudio.stop();
       setState(() {
         attackPlayer1 = false;
         standingPlayer1 = true;
@@ -179,7 +179,6 @@ class _BattlePageState extends State<BattlePage> {
   #######################################
   */
   void playerAura() {
-    stopMovesAudio();
     auraAudio.play(AssetSource('audio/aura1.ogg'));
     setState(() {
       disableActionButton = true;
@@ -188,6 +187,7 @@ class _BattlePageState extends State<BattlePage> {
     });
     Timer.periodic(const Duration(milliseconds: 1800), (timer) {
       timer.cancel();
+      auraAudio.stop();
       setState(() {
         disableActionButton = false;
         auraPlayer1 = false;
@@ -202,7 +202,6 @@ class _BattlePageState extends State<BattlePage> {
   #######################################
   */
   void playerSpecial() {
-    stopMovesAudio();
     specialAudio.play(AssetSource('audio/special1.ogg'));
     setState(() {
       disableActionButton = true;
@@ -229,6 +228,7 @@ class _BattlePageState extends State<BattlePage> {
       timer.cancel();
       specialCharacterTimer.cancel();
       explosionCharacterTimer.cancel();
+      specialAudio.stop();
       setState(() {
         specialPlayer = false;
         disableActionButton = false;
@@ -267,12 +267,6 @@ class _BattlePageState extends State<BattlePage> {
     battleAudio.stop();
   }
 
-  void stopMovesAudio() {
-    attackAudio.stop();
-    auraAudio.stop();
-    specialAudio.stop();
-  }
-
   /*
   #######################################
   ############### INIT ##################
@@ -296,7 +290,6 @@ class _BattlePageState extends State<BattlePage> {
     battleAudio
       ..stop()
       ..dispose();
-    stopMovesAudio();
     attackAudio.dispose();
     auraAudio.dispose();
     specialAudio.dispose();
