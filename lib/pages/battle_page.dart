@@ -2,12 +2,9 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:super_legends/components/aura.dart';
-import 'package:super_legends/components/character.dart';
-import 'package:super_legends/components/explosion.dart';
-import 'package:super_legends/components/skill.dart';
-import 'package:super_legends/enums/direction_enum.dart';
-import 'package:super_legends/enums/move_enum.dart';
+import 'package:super_legends/components/button.dart';
+import 'package:super_legends/components/enemy.dart';
+import 'package:super_legends/components/player.dart';
 
 class BattlePage extends StatefulWidget {
   const BattlePage({Key? key}) : super(key: key);
@@ -17,21 +14,40 @@ class BattlePage extends StatefulWidget {
 }
 
 class _BattlePageState extends State<BattlePage> {
+  /*
+  #######################################
+  ################ TIMER ################
+  #######################################
+  */
   late Timer standingCharacterTimer;
   late Timer attackCharacterTimer;
   late Timer specialCharacterTimer;
   late Timer explosionCharacterTimer;
+
+  /*
+  #######################################
+  ################ AUDIO ################
+  #######################################
+  */
   final attackAudio = AudioPlayer();
   final auraAudio = AudioPlayer();
   final specialAudio = AudioPlayer();
   final battleAudio = AudioPlayer();
   late bool isBattleAudioPlaying;
 
-  int standingSpriteCount = 1;
-  int attackSpriteCount = 0;
-  int specialSpriteCount = 1;
-  int explosionSpriteCount = 1;
+  /*
+  #######################################
+  ################ MAP ################
+  #######################################
+  */
+  int mapImage = 1;
 
+  /*
+  #######################################
+  ############## PLAYER 1 ###############
+  #######################################
+  */
+  int imageCharacter1 = 1;
   bool standingPlayer1 = true;
   bool attackPlayer1 = false;
   bool auraPlayer1 = false;
@@ -39,10 +55,36 @@ class _BattlePageState extends State<BattlePage> {
   bool specialEffect = false;
   bool explosionEffect = false;
 
-  bool defenseEnemy1 = false;
-
+  /*
+  #######################################
+  ############## DYNAMIC ################
+  #######################################
+  */
+  int auraEffectImage = 1;
+  int auraCharacterSpriteCount = 1;
+  int standingSpriteCount = 1;
+  int attackSpriteCount = 0;
+  int specialSpriteCount = 1;
+  int specialCharacterSpriteCount = 1;
+  int specialEffectImage = 1;
+  int explosionSpriteCount = 1;
   bool disableActionButton = false;
 
+  /*
+  #######################################
+  ############## ENEMY 1 ################
+  #######################################
+  */
+  bool defenseEnemy1 = false;
+  int imageEnemy1 = 2;
+  int defenseEnemySpriteCount = 1;
+  int explosionEnemyImage = 1;
+
+  /*
+  #######################################
+  ############### MOVES #################
+  #######################################
+  */
   void moveCharacter() {
     standingCharacterTimer =
         Timer.periodic(const Duration(milliseconds: 600), (timer) {
@@ -95,8 +137,13 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
+  /*
+  #######################################
+  ############## ATTACK #################
+  #######################################
+  */
   void playerAttack(int characterPosition) {
-    stopAllMoves();
+    stopMovesAudio();
     attackAudio.play(AssetSource('audio/teleport_combo.ogg'));
     setState(() {
       disableActionButton = true;
@@ -126,8 +173,13 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
+  /*
+  #######################################
+  ############### AURA ##################
+  #######################################
+  */
   void playerAura() {
-    stopAllMoves();
+    stopMovesAudio();
     auraAudio.play(AssetSource('audio/aura1.ogg'));
     setState(() {
       disableActionButton = true;
@@ -144,8 +196,13 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
+  /*
+  #######################################
+  ############## SPECIAL ################
+  #######################################
+  */
   void playerSpecial() {
-    stopAllMoves();
+    stopMovesAudio();
     specialAudio.play(AssetSource('audio/special1.ogg'));
     setState(() {
       disableActionButton = true;
@@ -184,6 +241,11 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
+  /*
+  #######################################
+  ############### AUDIO #################
+  #######################################
+  */
   void loopBattleAudio() {
     playBattleAudio();
     battleAudio.onPlayerComplete.listen((event) {
@@ -205,7 +267,7 @@ class _BattlePageState extends State<BattlePage> {
     battleAudio.stop();
   }
 
-  void stopAllMoves() {
+  void stopMovesAudio() {
     attackAudio
       ..stop()
       ..dispose();
@@ -217,13 +279,11 @@ class _BattlePageState extends State<BattlePage> {
       ..dispose();
   }
 
-  void disposeAudio() {
-    battleAudio
-      ..stop()
-      ..dispose();
-    stopAllMoves();
-  }
-
+  /*
+  #######################################
+  ############### INIT ##################
+  #######################################
+  */
   @override
   void initState() {
     loopBattleAudio();
@@ -231,10 +291,18 @@ class _BattlePageState extends State<BattlePage> {
     super.initState();
   }
 
+  /*
+  #######################################
+  ############## DISPOSE ################
+  #######################################
+  */
   @override
   void dispose() {
     standingCharacterTimer.cancel();
-    disposeAudio();
+    battleAudio
+      ..stop()
+      ..dispose();
+    stopMovesAudio();
     super.dispose();
   }
 
@@ -248,127 +316,67 @@ class _BattlePageState extends State<BattlePage> {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue[300],
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/maps/1.png'),
+                image: DecorationImage(
+                  image: AssetImage('assets/images/maps/$mapImage.png'),
                   fit: BoxFit.fill,
                 ),
               ),
               child: Stack(
                 children: [
-                  //Player 1 - Meio
-                  //Aura
-                  Visibility(
-                    visible: auraPlayer1,
-                    child: Container(
-                      alignment: const Alignment(-0.6, 0.6),
-                      child: Aura(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        spriteCount: standingSpriteCount,
-                      ),
-                    ),
+                  /*
+                  #######################################
+                  ############## PLAYER 1 ###############
+                  #######################################
+                  */
+                  Player(
+                    playerImage: imageCharacter1,
+                    auraEffectImage: auraEffectImage,
+                    auraEffectPositionX: -0.6,
+                    auraEffectPositionY: 0.6,
+                    auraEffectVisible: auraPlayer1,
+                    auraEffectSpriteCount: standingSpriteCount,
+                    auraCharacterVisible: auraPlayer1,
+                    auraCharacterSpriteCount: auraCharacterSpriteCount,
+                    auraCharacterPositionX: -0.6,
+                    auraCharacterPositionY: 0.6,
+                    standingCharacterVisible: standingPlayer1,
+                    standingCharacterSpriteCount: standingSpriteCount,
+                    standingCharacterPositionX: -0.6,
+                    standingCharacterPositionY: 0.6,
+                    specialCharacterVisible: specialPlayer,
+                    specialCharacterSpriteCount: specialCharacterSpriteCount,
+                    specialCharacterPositionX: -0.2,
+                    specialCharacterPositionY: 0.5,
+                    specialEffectImage: specialEffectImage,
+                    specialEffectVisible: specialEffect,
+                    specialEffectSpriteCount: specialSpriteCount,
+                    specialEffectPositionX: 0.7,
+                    specialEffectPositionY: 0.5,
                   ),
-                  Visibility(
-                    visible: auraPlayer1,
-                    child: Container(
-                      alignment: const Alignment(-0.6, 0.6),
-                      child: const Character(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        move: MoveEnum.aura,
-                        spriteCount: 1,
-                      ),
-                    ),
-                  ),
-                  //Standing
-                  Visibility(
-                    visible: standingPlayer1,
-                    child: Container(
-                      alignment: const Alignment(-0.6, 0.6),
-                      child: Character(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        move: MoveEnum.standing,
-                        spriteCount: standingSpriteCount,
-                      ),
-                    ),
-                  ),
-                  //Special
-                  Visibility(
-                    visible: specialPlayer,
-                    child: Container(
-                      alignment: const Alignment(-0.2, 0.5),
-                      child: const Character(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        move: MoveEnum.special,
-                        spriteCount: 1,
-                      ),
-                    ),
-                  ),
-                  //Special effect
-                  Visibility(
-                    visible: specialEffect,
-                    child: Container(
-                      alignment: const Alignment(0.7, 0.5),
-                      child: Skill(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        spriteCount: specialSpriteCount,
-                      ),
-                    ),
-                  ),
-
-                  // Meio
-                  //Enemy 1
-                  Visibility(
-                    visible: !defenseEnemy1,
-                    child: Container(
-                      alignment: const Alignment(0.8, 0.6),
-                      child: Character(
-                        image: 2,
-                        direction: DirectionEnum.right,
-                        move: MoveEnum.standing,
-                        spriteCount: standingSpriteCount,
-                      ),
-                    ),
-                  ),
-                  // Enemy defense
-                  Visibility(
-                    visible: defenseEnemy1,
-                    child: Container(
-                      alignment: const Alignment(0.8, 0.6),
-                      child: const Character(
-                        image: 2,
-                        direction: DirectionEnum.right,
-                        move: MoveEnum.defense,
-                        spriteCount: 1,
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: explosionEffect,
-                    child: Container(
-                      alignment: const Alignment(0.8, 0.6),
-                      child: Explosion(
-                        image: 1,
-                        direction: DirectionEnum.right,
-                        spriteCount: explosionSpriteCount,
-                      ),
-                    ),
-                  ),
-                  // Player Attack
-                  Visibility(
-                    visible: attackPlayer1,
-                    child: Container(
-                      alignment: const Alignment(0.65, 0.6),
-                      child: Character(
-                        image: 1,
-                        direction: DirectionEnum.left,
-                        move: MoveEnum.attack,
-                        spriteCount: attackSpriteCount,
-                      ),
-                    ),
+                  /*
+                  #######################################
+                  ############### ENEMY 1 ###############
+                  #######################################
+                  */
+                  Enemy(
+                    enemyImage: imageEnemy1,
+                    defenseVisible: defenseEnemy1,
+                    defenseSpriteCount: defenseEnemySpriteCount,
+                    defenseCharacterPositionX: 0.8,
+                    defenseCharacterPositionY: 0.6,
+                    standingCharacterSpriteCount: standingSpriteCount,
+                    standingCharacterPositionX: 0.8,
+                    standingCharacterPositionY: 0.6,
+                    explosionVisible: explosionEffect,
+                    explosionImage: explosionEnemyImage,
+                    explosionSpriteCount: explosionSpriteCount,
+                    explosionCharacterPositionX: 0.8,
+                    explosionCharacterPositionY: 0.6,
+                    playerVisible: attackPlayer1,
+                    playerImage: imageCharacter1,
+                    playerAttackSpriteCount: attackSpriteCount,
+                    playerAttackPositionX: 0.65,
+                    playerAttackPositionY: 0.6,
                   ),
                 ],
               ),
@@ -383,46 +391,28 @@ class _BattlePageState extends State<BattlePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: IgnorePointer(
-                          ignoring: disableActionButton,
-                          child: ElevatedButton(
-                            onPressed: () => playerAttack(1),
-                            child: const Text('Atk base'),
-                          ),
-                        ),
+                      Button(
+                        title: 'Atk base',
+                        callback: () => playerAttack(1),
+                        disableActionButton: disableActionButton,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: IgnorePointer(
-                          ignoring: disableActionButton,
-                          child: ElevatedButton(
-                            onPressed: playerAura,
-                            child: const Text('Ki'),
-                          ),
-                        ),
+                      Button(
+                        title: 'Ki',
+                        callback: playerAura,
+                        disableActionButton: disableActionButton,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: IgnorePointer(
-                          ignoring: disableActionButton,
-                          child: ElevatedButton(
-                            onPressed: playerSpecial,
-                            child: const Text('Special'),
-                          ),
-                        ),
+                      Button(
+                        title: 'Special',
+                        callback: playerSpecial,
+                        disableActionButton: disableActionButton,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: isBattleAudioPlaying
-                              ? stopBattleAudio
-                              : playBattleAudio,
-                          child: Text(isBattleAudioPlaying
-                              ? 'Stop bg audio'
-                              : 'Play bg audio'),
-                        ),
+                      Button(
+                        title: isBattleAudioPlaying
+                            ? 'Stop bg audio'
+                            : 'Play bg audio',
+                        callback: isBattleAudioPlaying
+                            ? stopBattleAudio
+                            : playBattleAudio,
                       ),
                     ],
                   ),
