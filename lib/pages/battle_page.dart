@@ -268,15 +268,9 @@ class _BattlePageState extends State<BattlePage> {
   }
 
   void stopMovesAudio() {
-    attackAudio
-      ..stop()
-      ..dispose();
-    auraAudio
-      ..stop()
-      ..dispose();
-    specialAudio
-      ..stop()
-      ..dispose();
+    attackAudio.stop();
+    auraAudio.stop();
+    specialAudio.stop();
   }
 
   /*
@@ -303,6 +297,9 @@ class _BattlePageState extends State<BattlePage> {
       ..stop()
       ..dispose();
     stopMovesAudio();
+    attackAudio.dispose();
+    auraAudio.dispose();
+    specialAudio.dispose();
     super.dispose();
   }
 
