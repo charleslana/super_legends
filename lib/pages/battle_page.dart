@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:super_legends/components/button.dart';
 import 'package:super_legends/components/enemy.dart';
 import 'package:super_legends/components/player.dart';
+import 'package:super_legends/utils/utils.dart';
 
 class BattlePage extends StatefulWidget {
   const BattlePage({Key? key}) : super(key: key);
@@ -277,6 +278,12 @@ class _BattlePageState extends State<BattlePage> {
     loopBattleAudio();
     moveCharacter();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    Utils.loadImages(context);
+    super.didChangeDependencies();
   }
 
   /*
