@@ -3,6 +3,7 @@ import 'package:super_legends/components/character.dart';
 import 'package:super_legends/components/explosion.dart';
 import 'package:super_legends/enums/direction_enum.dart';
 import 'package:super_legends/enums/move_enum.dart';
+import 'package:super_legends/utils/theme_utils.dart';
 
 class Enemy extends StatelessWidget {
   const Enemy({
@@ -25,6 +26,10 @@ class Enemy extends StatelessWidget {
     required this.playerAttackSpriteCount,
     required this.playerAttackPositionX,
     required this.playerAttackPositionY,
+    required this.damageVisible,
+    required this.damagePositionX,
+    required this.damagePositionY,
+    required this.damage,
   }) : super(key: key);
 
   final int enemyImage;
@@ -45,9 +50,15 @@ class Enemy extends StatelessWidget {
   final int playerAttackSpriteCount;
   final double playerAttackPositionX;
   final double playerAttackPositionY;
+  final bool damageVisible;
+  final double damagePositionX;
+  final double damagePositionY;
+  final String damage;
 
   @override
   Widget build(BuildContext context) {
+    final double fontSize = MediaQuery.of(context).size.height / 20;
+
     return Stack(
       children: [
         /*
@@ -100,6 +111,46 @@ class Enemy extends StatelessWidget {
               image: explosionImage,
               direction: DirectionEnum.right,
               spriteCount: explosionSpriteCount,
+            ),
+          ),
+        ),
+        /*
+        #######################################
+        ############ DAMAGE ENEMY #############
+        #######################################
+        */
+        Visibility(
+          visible: damageVisible,
+          child: Container(
+            alignment: Alignment(damagePositionX, damagePositionY),
+            child: Text(
+              damage,
+              style: ThemeUtils.actionComcsBlack().copyWith(
+                fontSize: fontSize,
+                color: Colors.red,
+                shadows: [
+                  const Shadow(
+                    // bottomLeft
+                    offset: Offset(-1.5, -1.5),
+                    color: Colors.white,
+                  ),
+                  const Shadow(
+                    // bottomRight
+                    offset: Offset(1.5, -1.5),
+                    color: Colors.white,
+                  ),
+                  const Shadow(
+                    // topRight
+                    offset: Offset(1.5, 1.5),
+                    color: Colors.white,
+                  ),
+                  const Shadow(
+                    // topLeft
+                    offset: Offset(-1.5, 1.5),
+                    color: Colors.white,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

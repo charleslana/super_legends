@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   Utils._();
@@ -73,5 +75,24 @@ class Utils {
         const AssetImage('assets/images/skill/1/special7.png'), context);
     precacheImage(
         const AssetImage('assets/images/skill/1/special8.png'), context);
+  }
+
+  static void loadFonts() {
+    FontLoader('ActionComcsBlack')
+      ..addFont(rootBundle.load('assets/fonts/Action_Comcs_Black.ttf'))
+      ..load();
+    FontLoader('AnimeInept')
+      ..addFont(rootBundle.load('assets/fonts/Anime_Inept.ttf'))
+      ..load();
+    FontLoader('KenvectorFuture')
+      ..addFont(rootBundle.load('assets/fonts/kenvector_future.ttf'))
+      ..load();
+  }
+
+  static String numberAbbreviation(dynamic myNumber) {
+    final String stringNumber = myNumber.toString();
+    final double doubleNumber = double.tryParse(stringNumber) ?? 0;
+    final NumberFormat numberFormat = NumberFormat.compact();
+    return numberFormat.format(doubleNumber);
   }
 }

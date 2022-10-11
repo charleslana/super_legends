@@ -1,16 +1,17 @@
 name: super_legends
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
   audioplayers: ^1.1.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -22,20 +23,33 @@ flutter:
   uses-material-design: true
 
   assets:
-      - assets/images/characters/1/
-      - assets/images/characters/2/
+    - assets/images/characters/1/
+    - assets/images/characters/2/
 
-      - assets/images/maps/
-      
-      - assets/images/skill/1/
+    - assets/images/maps/
 
-      - assets/images/aura/1/
+    - assets/images/skill/1/
 
-      - assets/images/explosion/1/
-      
-      - assets/audio/
+    - assets/images/aura/1/
+
+    - assets/images/explosion/1/
+
+    - assets/audio/
+
+  fonts:
+    - family: ActionComcsBlack
+      fonts:
+        - asset: assets/fonts/Action_Comcs_Black.ttf
+
+    - family: AnimeInept
+      fonts:
+        - asset: assets/fonts/Anime_Inept.ttf
+
+    - family: KenvectorFuture
+      fonts:
+        - asset: assets/fonts/kenvector_future.ttf
 
 flutter_icons:
   android: true
   ios: true
-  image_path: assets/images/app_icon.png         
+  image_path: assets/images/app_icon.png

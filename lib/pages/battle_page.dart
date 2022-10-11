@@ -24,6 +24,7 @@ class _BattlePageState extends State<BattlePage> {
   late Timer attackCharacterTimer;
   late Timer specialCharacterTimer;
   late Timer explosionCharacterTimer;
+  Timer damageTimer = Timer.periodic(Duration.zero, (timer) {});
 
   /*
   #######################################
@@ -80,6 +81,9 @@ class _BattlePageState extends State<BattlePage> {
   int imageEnemy1 = 2;
   int defenseEnemySpriteCount = 1;
   int explosionEnemyImage = 1;
+  bool damageVisible = false;
+  double damagePositionY = 0.4;
+  String damage = '0';
 
   /*
   #######################################
@@ -140,6 +144,31 @@ class _BattlePageState extends State<BattlePage> {
 
   /*
   #######################################
+  ############# DAMAGE ##################
+  #######################################
+  */
+  void showDamage() {
+    if (damageTimer.isActive) {
+      damageTimer.cancel();
+    }
+    damageTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      setState(() {
+        damageVisible = true;
+        damagePositionY -= 0.01;
+        damage = Utils.numberAbbreviation(145210);
+      });
+      if (damagePositionY < 0.3) {
+        timer.cancel();
+        setState(() {
+          damagePositionY = 0.4;
+          damageVisible = false;
+        });
+      }
+    });
+  }
+
+  /*
+  #######################################
   ############## ATTACK #################
   #######################################
   */
@@ -162,6 +191,7 @@ class _BattlePageState extends State<BattlePage> {
       timer.cancel();
       attackCharacterTimer.cancel();
       attackAudio.stop();
+      showDamage();
       setState(() {
         attackPlayer1 = false;
         standingPlayer1 = true;
@@ -223,6 +253,7 @@ class _BattlePageState extends State<BattlePage> {
         specialEffect = false;
         explosionEffect = true;
         defenseEnemy1 = true;
+        showDamage();
       });
     });
     Timer.periodic(const Duration(milliseconds: 2200), (timer) {
@@ -283,6 +314,7 @@ class _BattlePageState extends State<BattlePage> {
   @override
   void didChangeDependencies() {
     Utils.loadImages(context);
+    Utils.loadFonts();
     super.didChangeDependencies();
   }
 
@@ -374,6 +406,10 @@ class _BattlePageState extends State<BattlePage> {
                     playerAttackSpriteCount: attackSpriteCount,
                     playerAttackPositionX: 0.65,
                     playerAttackPositionY: 0.6,
+                    damageVisible: damageVisible,
+                    damagePositionX: 0.7,
+                    damagePositionY: damagePositionY,
+                    damage: damage,
                   ),
                 ],
               ),
