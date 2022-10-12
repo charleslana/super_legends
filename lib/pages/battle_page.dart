@@ -85,8 +85,11 @@ class _BattlePageState extends State<BattlePage> {
   int defenseEnemySpriteCount = 1;
   int explosionEnemyImage = 1;
   bool damageVisible = false;
+  double damagePositionX = 0.7;
   double damagePositionY = 0.4;
   String damage = '0';
+  bool standingEnemy1 = true;
+  bool attackEnemy1 = false;
 
   /*
   #######################################
@@ -106,13 +109,13 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
-  void moveCharacterAttack() {
+  void moveCharacterAttack(int maxSpriteCount) {
     attackCharacterTimer =
         Timer.periodic(const Duration(milliseconds: 150), (timer) {
       setState(() {
         attackSpriteCount++;
 
-        if (attackSpriteCount > 3) {
+        if (attackSpriteCount > maxSpriteCount) {
           attackSpriteCount = 1;
         }
       });
@@ -150,12 +153,13 @@ class _BattlePageState extends State<BattlePage> {
   ############# DAMAGE ##################
   #######################################
   */
-  void showDamage() {
+  void showDamage(double damagePosition) {
     if (damageTimer.isActive) {
       damageTimer.cancel();
     }
     damageTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
+        damagePositionX = damagePosition;
         damageVisible = true;
         damagePositionY -= 0.01;
         damage = Utils.numberAbbreviation(145210);
@@ -185,7 +189,7 @@ class _BattlePageState extends State<BattlePage> {
     });
     Timer.periodic(const Duration(milliseconds: 200), (timer) {
       timer.cancel();
-      moveCharacterAttack();
+      moveCharacterAttack(3);
       setState(() {
         attackPlayer1 = true;
 
@@ -196,7 +200,7 @@ class _BattlePageState extends State<BattlePage> {
       timer.cancel();
       attackCharacterTimer.cancel();
       attackAudio.stop();
-      showDamage();
+      showDamage(0.7);
       setState(() {
         attackPlayer1 = false;
         standingPlayer1 = true;
@@ -210,8 +214,36 @@ class _BattlePageState extends State<BattlePage> {
   }
 
   void enemyAttack(int enemyPosition) {
+    if (isAudioActive) {
+      attackAudio.play(AssetSource('audio/teleport_combo.ogg'));
+    }
     setState(() {
-      defensePlayer1 = true;
+      disableActionButton = true;
+      standingEnemy1 = false;
+    });
+    Timer.periodic(const Duration(milliseconds: 200), (timer) {
+      timer.cancel();
+      moveCharacterAttack(11);
+      setState(() {
+        attackEnemy1 = true;
+
+        defensePlayer1 = true;
+      });
+    });
+    Timer.periodic(const Duration(milliseconds: 1800), (timer) {
+      timer.cancel();
+      attackCharacterTimer.cancel();
+      attackAudio.stop();
+      showDamage(-0.5);
+      setState(() {
+        attackEnemy1 = false;
+        standingEnemy1 = true;
+
+        defensePlayer1 = false;
+
+        disableActionButton = false;
+        attackSpriteCount = 0;
+      });
     });
   }
 
@@ -268,7 +300,7 @@ class _BattlePageState extends State<BattlePage> {
         specialEffect = false;
         explosionEffect = true;
         defenseEnemy1 = true;
-        showDamage();
+        showDamage(0.7);
       });
     });
     Timer.periodic(const Duration(milliseconds: 2200), (timer) {
@@ -406,6 +438,11 @@ class _BattlePageState extends State<BattlePage> {
                     playerPositionX: -0.6,
                     playerPositionY: 0.6,
                     specialPlayerImage: specialPlayerImage,
+                    enemyAttackPositionX: -0.5,
+                    enemyAttackPositionY: 0.6,
+                    enemyAttackSpriteCount: attackSpriteCount,
+                    enemyImage: imageEnemy1,
+                    enemyVisible: attackEnemy1,
                   ),
                   /*
                   #######################################
@@ -416,6 +453,7 @@ class _BattlePageState extends State<BattlePage> {
                     enemyImage: imageEnemy1,
                     defenseVisible: defenseEnemy1,
                     defenseSpriteCount: defenseEnemySpriteCount,
+                    standingEnemyVisible: standingEnemy1,
                     standingEnemySpriteCount: standingSpriteCount,
                     explosionVisible: explosionEffect,
                     explosionImage: explosionEnemyImage,
@@ -425,10 +463,10 @@ class _BattlePageState extends State<BattlePage> {
                     playerVisible: attackPlayer1,
                     playerImage: imageCharacter1,
                     playerAttackSpriteCount: attackSpriteCount,
-                    playerAttackPositionX: 0.65,
+                    playerAttackPositionX: 0.7,
                     playerAttackPositionY: 0.6,
                     damageVisible: damageVisible,
-                    damagePositionX: 0.7,
+                    damagePositionX: damagePositionX,
                     damagePositionY: damagePositionY,
                     damage: damage,
                     enemyPositionX: 0.8,

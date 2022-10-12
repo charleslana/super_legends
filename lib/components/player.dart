@@ -29,6 +29,11 @@ class Player extends StatelessWidget {
     required this.playerPositionY,
     required this.auraVisible,
     required this.specialPlayerImage,
+    required this.enemyVisible,
+    required this.enemyAttackPositionX,
+    required this.enemyAttackPositionY,
+    required this.enemyImage,
+    required this.enemyAttackSpriteCount,
   }) : super(key: key);
 
   final int playerImage;
@@ -52,6 +57,11 @@ class Player extends StatelessWidget {
   final double playerPositionY;
   final bool auraVisible;
   final int specialPlayerImage;
+  final bool enemyVisible;
+  final double enemyAttackPositionX;
+  final double enemyAttackPositionY;
+  final int enemyImage;
+  final int enemyAttackSpriteCount;
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +166,23 @@ class Player extends StatelessWidget {
               image: specialEffectImage,
               direction: DirectionEnum.left,
               spriteCount: specialEffectSpriteCount,
+            ),
+          ),
+        ),
+        /*
+        #######################################
+        ########### ATTACK ENEMY ##############
+        #######################################
+        */
+        Visibility(
+          visible: enemyVisible,
+          child: Container(
+            alignment: Alignment(enemyAttackPositionX, enemyAttackPositionY),
+            child: Character(
+              image: enemyImage,
+              direction: DirectionEnum.right,
+              move: MoveEnum.attack,
+              spriteCount: enemyAttackSpriteCount,
             ),
           ),
         ),

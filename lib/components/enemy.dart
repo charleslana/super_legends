@@ -10,6 +10,7 @@ class Enemy extends StatelessWidget {
     Key? key,
     required this.enemyImage,
     required this.defenseVisible,
+    required this.standingEnemyVisible,
     required this.defenseSpriteCount,
     required this.standingEnemySpriteCount,
     required this.explosionVisible,
@@ -33,6 +34,7 @@ class Enemy extends StatelessWidget {
   final int enemyImage;
   final bool defenseVisible;
   final int defenseSpriteCount;
+  final bool standingEnemyVisible;
   final int standingEnemySpriteCount;
   final bool explosionVisible;
   final int explosionImage;
@@ -63,7 +65,7 @@ class Enemy extends StatelessWidget {
         #######################################
         */
         Visibility(
-          visible: !defenseVisible,
+          visible: standingEnemyVisible && !defenseVisible,
           child: Container(
             alignment: Alignment(enemyPositionX, enemyPositionY),
             child: Character(
