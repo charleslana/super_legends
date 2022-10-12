@@ -10,52 +10,48 @@ class Player extends StatelessWidget {
     Key? key,
     required this.playerImage,
     required this.auraEffectImage,
-    required this.auraEffectPositionX,
-    required this.auraEffectPositionY,
-    required this.auraEffectVisible,
     required this.auraEffectSpriteCount,
-    required this.auraCharacterVisible,
-    required this.auraCharacterSpriteCount,
-    required this.auraCharacterPositionX,
-    required this.auraCharacterPositionY,
-    required this.standingCharacterVisible,
-    required this.standingCharacterSpriteCount,
-    required this.standingCharacterPositionX,
-    required this.standingCharacterPositionY,
-    required this.specialCharacterVisible,
-    required this.specialCharacterSpriteCount,
-    required this.specialCharacterPositionX,
-    required this.specialCharacterPositionY,
+    required this.auraPlayerSpriteCount,
+    required this.standingPlayerVisible,
+    required this.standingPlayerSpriteCount,
+    required this.specialPlayerVisible,
+    required this.specialPlayerSpriteCount,
+    required this.specialPlayerPositionX,
+    required this.specialPlayerPositionY,
     required this.specialEffectImage,
     required this.specialEffectVisible,
     required this.specialEffectSpriteCount,
     required this.specialEffectPositionX,
     required this.specialEffectPositionY,
+    required this.defenseVisible,
+    required this.defenseSpriteCount,
+    required this.playerPositionX,
+    required this.playerPositionY,
+    required this.auraVisible,
+    required this.specialPlayerImage,
   }) : super(key: key);
 
   final int playerImage;
   final int auraEffectImage;
-  final double auraEffectPositionX;
-  final double auraEffectPositionY;
-  final bool auraEffectVisible;
   final int auraEffectSpriteCount;
-  final bool auraCharacterVisible;
-  final int auraCharacterSpriteCount;
-  final double auraCharacterPositionX;
-  final double auraCharacterPositionY;
-  final bool standingCharacterVisible;
-  final int standingCharacterSpriteCount;
-  final double standingCharacterPositionX;
-  final double standingCharacterPositionY;
-  final bool specialCharacterVisible;
-  final int specialCharacterSpriteCount;
-  final double specialCharacterPositionX;
-  final double specialCharacterPositionY;
+  final int auraPlayerSpriteCount;
+  final bool standingPlayerVisible;
+  final int standingPlayerSpriteCount;
+  final bool specialPlayerVisible;
+  final int specialPlayerSpriteCount;
+  final double specialPlayerPositionX;
+  final double specialPlayerPositionY;
   final int specialEffectImage;
   final bool specialEffectVisible;
   final int specialEffectSpriteCount;
   final double specialEffectPositionX;
   final double specialEffectPositionY;
+  final bool defenseVisible;
+  final int defenseSpriteCount;
+  final double playerPositionX;
+  final double playerPositionY;
+  final bool auraVisible;
+  final int specialPlayerImage;
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +63,9 @@ class Player extends StatelessWidget {
         #######################################
         */
         Visibility(
-          visible: auraEffectVisible,
+          visible: auraVisible,
           child: Container(
-            alignment: Alignment(auraEffectPositionX, auraEffectPositionY),
+            alignment: Alignment(playerPositionX, playerPositionY),
             child: Aura(
               image: auraEffectImage,
               direction: DirectionEnum.left,
@@ -83,15 +79,14 @@ class Player extends StatelessWidget {
         #######################################
         */
         Visibility(
-          visible: auraCharacterVisible,
+          visible: auraVisible,
           child: Container(
-            alignment:
-                Alignment(auraCharacterPositionX, auraCharacterPositionY),
+            alignment: Alignment(playerPositionX, playerPositionY),
             child: Character(
               image: playerImage,
               direction: DirectionEnum.left,
               move: MoveEnum.aura,
-              spriteCount: auraCharacterSpriteCount,
+              spriteCount: auraPlayerSpriteCount,
             ),
           ),
         ),
@@ -101,15 +96,31 @@ class Player extends StatelessWidget {
         #######################################
         */
         Visibility(
-          visible: standingCharacterVisible,
+          visible: standingPlayerVisible && !defenseVisible,
           child: Container(
-            alignment: Alignment(
-                standingCharacterPositionX, standingCharacterPositionY),
+            alignment: Alignment(playerPositionX, playerPositionY),
             child: Character(
               image: playerImage,
               direction: DirectionEnum.left,
               move: MoveEnum.standing,
-              spriteCount: standingCharacterSpriteCount,
+              spriteCount: standingPlayerSpriteCount,
+            ),
+          ),
+        ),
+        /*
+        #######################################
+        ########### DEFENSE PLAYER ############
+        #######################################
+        */
+        Visibility(
+          visible: defenseVisible,
+          child: Container(
+            alignment: Alignment(playerPositionX, playerPositionY),
+            child: Character(
+              image: playerImage,
+              direction: DirectionEnum.left,
+              move: MoveEnum.defense,
+              spriteCount: defenseSpriteCount,
             ),
           ),
         ),
@@ -119,15 +130,15 @@ class Player extends StatelessWidget {
         #######################################
         */
         Visibility(
-          visible: specialCharacterVisible,
+          visible: specialPlayerVisible,
           child: Container(
             alignment:
-                Alignment(specialCharacterPositionX, specialCharacterPositionY),
+                Alignment(specialPlayerPositionX, specialPlayerPositionY),
             child: Character(
-              image: playerImage,
+              image: specialPlayerImage,
               direction: DirectionEnum.left,
               move: MoveEnum.special,
-              spriteCount: specialCharacterSpriteCount,
+              spriteCount: specialPlayerSpriteCount,
             ),
           ),
         ),

@@ -11,16 +11,12 @@ class Enemy extends StatelessWidget {
     required this.enemyImage,
     required this.defenseVisible,
     required this.defenseSpriteCount,
-    required this.defenseCharacterPositionX,
-    required this.defenseCharacterPositionY,
-    required this.standingCharacterSpriteCount,
-    required this.standingCharacterPositionX,
-    required this.standingCharacterPositionY,
+    required this.standingEnemySpriteCount,
     required this.explosionVisible,
     required this.explosionImage,
     required this.explosionSpriteCount,
-    required this.explosionCharacterPositionX,
-    required this.explosionCharacterPositionY,
+    required this.explosionEnemyPositionX,
+    required this.explosionEnemyPositionY,
     required this.playerVisible,
     required this.playerImage,
     required this.playerAttackSpriteCount,
@@ -30,21 +26,19 @@ class Enemy extends StatelessWidget {
     required this.damagePositionX,
     required this.damagePositionY,
     required this.damage,
+    required this.enemyPositionX,
+    required this.enemyPositionY,
   }) : super(key: key);
 
   final int enemyImage;
   final bool defenseVisible;
   final int defenseSpriteCount;
-  final double defenseCharacterPositionX;
-  final double defenseCharacterPositionY;
-  final int standingCharacterSpriteCount;
-  final double standingCharacterPositionX;
-  final double standingCharacterPositionY;
+  final int standingEnemySpriteCount;
   final bool explosionVisible;
   final int explosionImage;
   final int explosionSpriteCount;
-  final double explosionCharacterPositionX;
-  final double explosionCharacterPositionY;
+  final double explosionEnemyPositionX;
+  final double explosionEnemyPositionY;
   final bool playerVisible;
   final int playerImage;
   final int playerAttackSpriteCount;
@@ -54,6 +48,8 @@ class Enemy extends StatelessWidget {
   final double damagePositionX;
   final double damagePositionY;
   final String damage;
+  final double enemyPositionX;
+  final double enemyPositionY;
 
   @override
   Widget build(BuildContext context) {
@@ -69,13 +65,12 @@ class Enemy extends StatelessWidget {
         Visibility(
           visible: !defenseVisible,
           child: Container(
-            alignment: Alignment(
-                standingCharacterPositionX, standingCharacterPositionY),
+            alignment: Alignment(enemyPositionX, enemyPositionY),
             child: Character(
               image: enemyImage,
               direction: DirectionEnum.right,
               move: MoveEnum.standing,
-              spriteCount: standingCharacterSpriteCount,
+              spriteCount: standingEnemySpriteCount,
             ),
           ),
         ),
@@ -87,8 +82,7 @@ class Enemy extends StatelessWidget {
         Visibility(
           visible: defenseVisible,
           child: Container(
-            alignment:
-                Alignment(defenseCharacterPositionX, defenseCharacterPositionY),
+            alignment: Alignment(enemyPositionX, enemyPositionY),
             child: Character(
               image: enemyImage,
               direction: DirectionEnum.right,
@@ -105,8 +99,8 @@ class Enemy extends StatelessWidget {
         Visibility(
           visible: explosionVisible,
           child: Container(
-            alignment: Alignment(
-                explosionCharacterPositionX, explosionCharacterPositionY),
+            alignment:
+                Alignment(explosionEnemyPositionX, explosionEnemyPositionY),
             child: Explosion(
               image: explosionImage,
               direction: DirectionEnum.right,

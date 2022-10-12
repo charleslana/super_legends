@@ -31,6 +31,7 @@ class _BattlePageState extends State<BattlePage> {
   ################ AUDIO ################
   #######################################
   */
+  bool isAudioActive = false;
   final attackAudio = AudioPlayer();
   final auraAudio = AudioPlayer();
   final specialAudio = AudioPlayer();
@@ -56,6 +57,7 @@ class _BattlePageState extends State<BattlePage> {
   bool specialPlayer = false;
   bool specialEffect = false;
   bool explosionEffect = false;
+  bool defensePlayer1 = false;
 
   /*
   #######################################
@@ -71,6 +73,7 @@ class _BattlePageState extends State<BattlePage> {
   int specialEffectImage = 1;
   int explosionSpriteCount = 1;
   bool disableActionButton = false;
+  int specialPlayerImage = 1;
 
   /*
   #######################################
@@ -173,7 +176,9 @@ class _BattlePageState extends State<BattlePage> {
   #######################################
   */
   void playerAttack(int characterPosition) {
-    attackAudio.play(AssetSource('audio/teleport_combo.ogg'));
+    if (isAudioActive) {
+      attackAudio.play(AssetSource('audio/teleport_combo.ogg'));
+    }
     setState(() {
       disableActionButton = true;
       standingPlayer1 = false;
@@ -204,13 +209,21 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
+  void enemyAttack(int enemyPosition) {
+    setState(() {
+      defensePlayer1 = true;
+    });
+  }
+
   /*
   #######################################
   ############### AURA ##################
   #######################################
   */
   void playerAura() {
-    auraAudio.play(AssetSource('audio/aura1.ogg'));
+    if (isAudioActive) {
+      auraAudio.play(AssetSource('audio/aura1.ogg'));
+    }
     setState(() {
       disableActionButton = true;
       auraPlayer1 = true;
@@ -233,7 +246,9 @@ class _BattlePageState extends State<BattlePage> {
   #######################################
   */
   void playerSpecial() {
-    specialAudio.play(AssetSource('audio/special1.ogg'));
+    if (isAudioActive) {
+      specialAudio.play(AssetSource('audio/special1.ogg'));
+    }
     setState(() {
       disableActionButton = true;
       standingPlayer1 = false;
@@ -299,6 +314,18 @@ class _BattlePageState extends State<BattlePage> {
     battleAudio.stop();
   }
 
+  void playEffectAudio() {
+    setState(() {
+      isAudioActive = true;
+    });
+  }
+
+  void stopEffectAudio() {
+    setState(() {
+      isAudioActive = false;
+    });
+  }
+
   /*
   #######################################
   ############### INIT ##################
@@ -341,7 +368,7 @@ class _BattlePageState extends State<BattlePage> {
       body: Column(
         children: [
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.blue[300],
@@ -360,27 +387,25 @@ class _BattlePageState extends State<BattlePage> {
                   Player(
                     playerImage: imageCharacter1,
                     auraEffectImage: auraEffectImage,
-                    auraEffectPositionX: -0.6,
-                    auraEffectPositionY: 0.6,
-                    auraEffectVisible: auraPlayer1,
                     auraEffectSpriteCount: standingSpriteCount,
-                    auraCharacterVisible: auraPlayer1,
-                    auraCharacterSpriteCount: auraCharacterSpriteCount,
-                    auraCharacterPositionX: -0.6,
-                    auraCharacterPositionY: 0.6,
-                    standingCharacterVisible: standingPlayer1,
-                    standingCharacterSpriteCount: standingSpriteCount,
-                    standingCharacterPositionX: -0.6,
-                    standingCharacterPositionY: 0.6,
-                    specialCharacterVisible: specialPlayer,
-                    specialCharacterSpriteCount: specialCharacterSpriteCount,
-                    specialCharacterPositionX: -0.2,
-                    specialCharacterPositionY: 0.5,
+                    auraPlayerSpriteCount: auraCharacterSpriteCount,
+                    standingPlayerVisible: standingPlayer1,
+                    standingPlayerSpriteCount: standingSpriteCount,
+                    specialPlayerVisible: specialPlayer,
+                    specialPlayerSpriteCount: specialCharacterSpriteCount,
+                    specialPlayerPositionX: -0.2,
+                    specialPlayerPositionY: 0.5,
                     specialEffectImage: specialEffectImage,
                     specialEffectVisible: specialEffect,
                     specialEffectSpriteCount: specialSpriteCount,
                     specialEffectPositionX: 0.7,
                     specialEffectPositionY: 0.5,
+                    defenseSpriteCount: 1,
+                    defenseVisible: defensePlayer1,
+                    auraVisible: auraPlayer1,
+                    playerPositionX: -0.6,
+                    playerPositionY: 0.6,
+                    specialPlayerImage: specialPlayerImage,
                   ),
                   /*
                   #######################################
@@ -391,16 +416,12 @@ class _BattlePageState extends State<BattlePage> {
                     enemyImage: imageEnemy1,
                     defenseVisible: defenseEnemy1,
                     defenseSpriteCount: defenseEnemySpriteCount,
-                    defenseCharacterPositionX: 0.8,
-                    defenseCharacterPositionY: 0.6,
-                    standingCharacterSpriteCount: standingSpriteCount,
-                    standingCharacterPositionX: 0.8,
-                    standingCharacterPositionY: 0.6,
+                    standingEnemySpriteCount: standingSpriteCount,
                     explosionVisible: explosionEffect,
                     explosionImage: explosionEnemyImage,
                     explosionSpriteCount: explosionSpriteCount,
-                    explosionCharacterPositionX: 0.8,
-                    explosionCharacterPositionY: 0.6,
+                    explosionEnemyPositionX: 0.8,
+                    explosionEnemyPositionY: 0.6,
                     playerVisible: attackPlayer1,
                     playerImage: imageCharacter1,
                     playerAttackSpriteCount: attackSpriteCount,
@@ -410,6 +431,8 @@ class _BattlePageState extends State<BattlePage> {
                     damagePositionX: 0.7,
                     damagePositionY: damagePositionY,
                     damage: damage,
+                    enemyPositionX: 0.8,
+                    enemyPositionY: 0.6,
                   ),
                 ],
               ),
@@ -424,28 +447,67 @@ class _BattlePageState extends State<BattlePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Button(
-                        title: 'Atk base',
-                        callback: () => playerAttack(1),
-                        disableActionButton: disableActionButton,
+                      Column(
+                        children: [
+                          Button(
+                            title: 'Atk base',
+                            callback: () => playerAttack(1),
+                            disableActionButton: disableActionButton,
+                          ),
+                          Button(
+                            title: 'Atk base enemy',
+                            callback: () => enemyAttack(1),
+                            disableActionButton: disableActionButton,
+                          ),
+                        ],
                       ),
-                      Button(
-                        title: 'Ki',
-                        callback: playerAura,
-                        disableActionButton: disableActionButton,
+                      Column(
+                        children: [
+                          Button(
+                            title: 'Ki',
+                            callback: playerAura,
+                            disableActionButton: disableActionButton,
+                          ),
+                          Button(
+                            title: 'Ki enemy',
+                            callback: () {},
+                            disableActionButton: disableActionButton,
+                          ),
+                        ],
                       ),
-                      Button(
-                        title: 'Special',
-                        callback: playerSpecial,
-                        disableActionButton: disableActionButton,
+                      Column(
+                        children: [
+                          Button(
+                            title: 'Special',
+                            callback: playerSpecial,
+                            disableActionButton: disableActionButton,
+                          ),
+                          Button(
+                            title: 'Special enemy',
+                            callback: () {},
+                            disableActionButton: disableActionButton,
+                          ),
+                        ],
                       ),
-                      Button(
-                        title: isBattleAudioPlaying
-                            ? 'Stop bg audio'
-                            : 'Play bg audio',
-                        callback: isBattleAudioPlaying
-                            ? stopBattleAudio
-                            : playBattleAudio,
+                      Column(
+                        children: [
+                          Button(
+                            title: isBattleAudioPlaying
+                                ? 'Stop bg audio'
+                                : 'Play bg audio',
+                            callback: isBattleAudioPlaying
+                                ? stopBattleAudio
+                                : playBattleAudio,
+                          ),
+                          Button(
+                            title: isAudioActive
+                                ? 'Stop effect audio'
+                                : 'Play effect audio',
+                            callback: isAudioActive
+                                ? stopEffectAudio
+                                : playEffectAudio,
+                          ),
+                        ],
                       ),
                     ],
                   ),
