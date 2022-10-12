@@ -31,7 +31,7 @@ class _BattlePageState extends State<BattlePage> {
   ################ AUDIO ################
   #######################################
   */
-  bool isAudioActive = false;
+  bool isAudioActive = true;
   final attackAudio = AudioPlayer();
   final auraAudio = AudioPlayer();
   final specialAudio = AudioPlayer();

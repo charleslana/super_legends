@@ -6,9 +6,24 @@ class Utils {
   Utils._();
 
   static void loadImages(BuildContext context) {
+    /*
+    #######################################
+    ################ MAP 1 ################
+    #######################################
+    */
     precacheImage(const AssetImage('assets/images/maps/1.png'), context);
+    /*
+    #######################################
+    ############### AURA 1 ################
+    #######################################
+    */
     precacheImage(const AssetImage('assets/images/aura/1/aura1.png'), context);
     precacheImage(const AssetImage('assets/images/aura/1/aura2.png'), context);
+    /*
+    #######################################
+    ############# CHARACTER 1 #############
+    #######################################
+    */
     precacheImage(
         const AssetImage('assets/images/characters/1/attack0.png'), context);
     precacheImage(
@@ -26,11 +41,53 @@ class Utils {
     precacheImage(
         const AssetImage('assets/images/characters/1/standing2.png'), context);
     precacheImage(
+        const AssetImage('assets/images/characters/1/defense1.png'), context);
+    /*
+    #######################################
+    ############# CHARACTER 2 #############
+    #######################################
+    */
+    precacheImage(
         const AssetImage('assets/images/characters/2/defense1.png'), context);
     precacheImage(
         const AssetImage('assets/images/characters/2/standing1.png'), context);
     precacheImage(
         const AssetImage('assets/images/characters/2/standing2.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack0.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack1.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack2.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack3.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack4.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack5.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack6.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack7.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack8.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack9.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack10.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/attack11.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/aura1.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/special1.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/characters/2/special2.png'), context);
+    /*
+    #######################################
+    ############# EXPLOSION 1 #############
+    #######################################
+    */
     precacheImage(
         const AssetImage('assets/images/explosion/1/explosion0.png'), context);
     precacheImage(
@@ -57,6 +114,11 @@ class Utils {
         const AssetImage('assets/images/explosion/1/explosion11.png'), context);
     precacheImage(
         const AssetImage('assets/images/explosion/1/explosion12.png'), context);
+    /*
+    #######################################
+    ############### SKILL 1 ###############
+    #######################################
+    */
     precacheImage(
         const AssetImage('assets/images/skill/1/special0.png'), context);
     precacheImage(
