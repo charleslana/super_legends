@@ -478,78 +478,86 @@ class _BattlePageState extends State<BattlePage> {
           ),
           Expanded(
             child: Container(
+              width: double.infinity,
               color: Colors.grey[500],
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Column(
-                        children: [
-                          Button(
-                            title: 'Atk base',
-                            callback: () => playerAttack(1),
-                            disableActionButton: disableActionButton,
-                          ),
-                          Button(
-                            title: 'Atk base enemy',
-                            callback: () => enemyAttack(1),
-                            disableActionButton: disableActionButton,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Button(
-                            title: 'Ki',
-                            callback: playerAura,
-                            disableActionButton: disableActionButton,
-                          ),
-                          Button(
-                            title: 'Ki enemy',
-                            callback: () {},
-                            disableActionButton: disableActionButton,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Button(
-                            title: 'Special',
-                            callback: playerSpecial,
-                            disableActionButton: disableActionButton,
-                          ),
-                          Button(
-                            title: 'Special enemy',
-                            callback: () {},
-                            disableActionButton: disableActionButton,
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Button(
-                            title: isBattleAudioPlaying
-                                ? 'Stop bg audio'
-                                : 'Play bg audio',
-                            callback: isBattleAudioPlaying
-                                ? stopBattleAudio
-                                : playBattleAudio,
-                          ),
-                          Button(
-                            title: isAudioActive
-                                ? 'Stop effect audio'
-                                : 'Play effect audio',
-                            callback: isAudioActive
-                                ? stopEffectAudio
-                                : playEffectAudio,
-                          ),
-                        ],
-                      ),
-                    ],
+              child: Center(
+                child: SingleChildScrollView(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                Button(
+                                  title: 'Atk base',
+                                  callback: () => playerAttack(1),
+                                  disableActionButton: disableActionButton,
+                                ),
+                                Button(
+                                  title: 'Atk base enemy',
+                                  callback: () => enemyAttack(1),
+                                  disableActionButton: disableActionButton,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Button(
+                                  title: 'Ki',
+                                  callback: playerAura,
+                                  disableActionButton: disableActionButton,
+                                ),
+                                Button(
+                                  title: 'Ki enemy',
+                                  callback: () {},
+                                  disableActionButton: disableActionButton,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Button(
+                                  title: 'Special',
+                                  callback: playerSpecial,
+                                  disableActionButton: disableActionButton,
+                                ),
+                                Button(
+                                  title: 'Special enemy',
+                                  callback: () {},
+                                  disableActionButton: disableActionButton,
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Button(
+                                  title: isBattleAudioPlaying
+                                      ? 'Stop bg audio'
+                                      : 'Play bg audio',
+                                  callback: isBattleAudioPlaying
+                                      ? stopBattleAudio
+                                      : playBattleAudio,
+                                ),
+                                Button(
+                                  title: isAudioActive
+                                      ? 'Stop effect audio'
+                                      : 'Play effect audio',
+                                  callback: isAudioActive
+                                      ? stopEffectAudio
+                                      : playEffectAudio,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
           ),
