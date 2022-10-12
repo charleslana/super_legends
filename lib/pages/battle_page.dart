@@ -90,6 +90,7 @@ class _BattlePageState extends State<BattlePage> {
   String damage = '0';
   bool standingEnemy1 = true;
   bool attackEnemy1 = false;
+  bool auraEnemy1 = false;
 
   /*
   #######################################
@@ -257,6 +258,7 @@ class _BattlePageState extends State<BattlePage> {
       auraAudio.play(AssetSource('audio/aura1.ogg'));
     }
     setState(() {
+      auraEffectImage = 1;
       disableActionButton = true;
       auraPlayer1 = true;
       standingPlayer1 = false;
@@ -268,6 +270,27 @@ class _BattlePageState extends State<BattlePage> {
         disableActionButton = false;
         auraPlayer1 = false;
         standingPlayer1 = true;
+      });
+    });
+  }
+
+  void enemyAura() {
+    if (isAudioActive) {
+      auraAudio.play(AssetSource('audio/aura1.ogg'));
+    }
+    setState(() {
+      auraEffectImage = 2;
+      disableActionButton = true;
+      auraEnemy1 = true;
+      standingEnemy1 = false;
+    });
+    Timer.periodic(const Duration(milliseconds: 1800), (timer) {
+      timer.cancel();
+      auraAudio.stop();
+      setState(() {
+        disableActionButton = false;
+        auraEnemy1 = false;
+        standingEnemy1 = true;
       });
     });
   }
@@ -471,6 +494,10 @@ class _BattlePageState extends State<BattlePage> {
                     damage: damage,
                     enemyPositionX: 0.8,
                     enemyPositionY: 0.6,
+                    auraEffectImage: auraEffectImage,
+                    auraEffectSpriteCount: standingSpriteCount,
+                    auraEnemySpriteCount: auraCharacterSpriteCount,
+                    auraVisible: auraEnemy1,
                   ),
                 ],
               ),
@@ -513,7 +540,7 @@ class _BattlePageState extends State<BattlePage> {
                                 ),
                                 Button(
                                   title: 'Ki enemy',
-                                  callback: () {},
+                                  callback: enemyAura,
                                   disableActionButton: disableActionButton,
                                 ),
                               ],

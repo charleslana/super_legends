@@ -19,6 +19,8 @@ class Utils {
     */
     precacheImage(const AssetImage('assets/images/aura/1/aura1.png'), context);
     precacheImage(const AssetImage('assets/images/aura/1/aura2.png'), context);
+    precacheImage(const AssetImage('assets/images/aura/2/aura1.png'), context);
+    precacheImage(const AssetImage('assets/images/aura/2/aura2.png'), context);
     /*
     #######################################
     ############# CHARACTER 1 #############
@@ -137,6 +139,43 @@ class Utils {
         const AssetImage('assets/images/skill/1/special7.png'), context);
     precacheImage(
         const AssetImage('assets/images/skill/1/special8.png'), context);
+    /*
+    #######################################
+    ############### SKILL 2 ###############
+    #######################################
+    */
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special0.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special1.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special2.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special3.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special4.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special5.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special6.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special7.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special8.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special9.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special10.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special11.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special12.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special13.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special14.png'), context);
+    precacheImage(
+        const AssetImage('assets/images/skill/2/special15.png'), context);
   }
 
   static void loadFonts() {
