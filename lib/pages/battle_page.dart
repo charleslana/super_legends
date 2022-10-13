@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:super_legends/components/button.dart';
+import 'package:super_legends/components/damage.dart';
 import 'package:super_legends/components/enemy.dart';
+import 'package:super_legends/components/explosion_character.dart';
 import 'package:super_legends/components/player.dart';
+import 'package:super_legends/components/special.dart';
+import 'package:super_legends/enums/direction_enum.dart';
 import 'package:super_legends/utils/utils.dart';
 
 class BattlePage extends StatefulWidget {
@@ -22,7 +26,7 @@ class _BattlePageState extends State<BattlePage> {
   */
   late Timer standingCharacterTimer;
   late Timer attackCharacterTimer;
-  late Timer specialCharacterTimer;
+  late Timer specialEffectTimer;
   late Timer explosionCharacterTimer;
   Timer damageTimer = Timer.periodic(Duration.zero, (timer) {});
 
@@ -54,9 +58,6 @@ class _BattlePageState extends State<BattlePage> {
   bool standingPlayer1 = true;
   bool attackPlayer1 = false;
   bool auraPlayer1 = false;
-  bool specialPlayer = false;
-  bool specialEffect = false;
-  bool explosionEffect = false;
   bool defensePlayer1 = false;
 
   /*
@@ -64,16 +65,28 @@ class _BattlePageState extends State<BattlePage> {
   ############## DYNAMIC ################
   #######################################
   */
+  DirectionEnum direction = DirectionEnum.left;
+  bool specialCharacterVisible = false;
+  double specialCharacterPositionX = -0.2;
+  double specialCharacterPositionY = 0.5;
+  bool specialEffectVisible = false;
+  double specialEffectPositionX = 0.7;
+  double specialEffectPositionY = 0.5;
+  int specialEffectImage = 1;
+  int specialEffectSpriteCount = 0;
+  int specialCharacterImage = 1;
+  int specialCharacterSpriteCount = 1;
+  bool isExplosionVisible = false;
+  double explosionPositionX = 0.8;
+  double explosionPositionY = 0.6;
+  int explosionImage = 1;
+  int explosionSpriteCount = 0;
+
   int auraEffectImage = 1;
   int auraCharacterSpriteCount = 1;
   int standingSpriteCount = 1;
   int attackSpriteCount = 0;
-  int specialSpriteCount = 1;
-  int specialCharacterSpriteCount = 1;
-  int specialEffectImage = 1;
-  int explosionSpriteCount = 1;
   bool disableActionButton = false;
-  int specialPlayerImage = 1;
 
   /*
   #######################################
@@ -83,11 +96,10 @@ class _BattlePageState extends State<BattlePage> {
   bool defenseEnemy1 = false;
   int imageEnemy1 = 2;
   int defenseEnemySpriteCount = 1;
-  int explosionEnemyImage = 1;
   bool damageVisible = false;
   double damagePositionX = 0.7;
   double damagePositionY = 0.4;
-  String damage = '0';
+  int damage = 0;
   bool standingEnemy1 = true;
   bool attackEnemy1 = false;
   bool auraEnemy1 = false;
@@ -123,14 +135,14 @@ class _BattlePageState extends State<BattlePage> {
     });
   }
 
-  void moveCharacterSpecial() {
-    specialCharacterTimer =
-        Timer.periodic(const Duration(milliseconds: 150), (timer) {
+  void moveEffectSpecial(int specialCount, int milliseconds) {
+    specialEffectTimer =
+        Timer.periodic(Duration(milliseconds: milliseconds), (timer) {
       setState(() {
-        specialSpriteCount++;
+        specialEffectSpriteCount++;
 
-        if (specialSpriteCount > 8) {
-          specialSpriteCount = 1;
+        if (specialEffectSpriteCount > specialCount) {
+          specialEffectSpriteCount = 1;
         }
       });
     });
@@ -163,7 +175,7 @@ class _BattlePageState extends State<BattlePage> {
         damagePositionX = damagePosition;
         damageVisible = true;
         damagePositionY -= 0.01;
-        damage = Utils.numberAbbreviation(145210);
+        damage = 145210;
       });
       if (damagePositionY < 0.3) {
         timer.cancel();
@@ -305,40 +317,104 @@ class _BattlePageState extends State<BattlePage> {
       specialAudio.play(AssetSource('audio/special1.ogg'));
     }
     setState(() {
+      direction = DirectionEnum.left;
+      specialCharacterImage = 1;
+      specialEffectImage = 1;
+      specialCharacterPositionX = -0.2;
+      specialCharacterPositionY = 0.5;
+      specialEffectPositionX = 0.7;
+      specialEffectPositionY = 0.5;
       disableActionButton = true;
       standingPlayer1 = false;
-      specialPlayer = true;
+      specialCharacterVisible = true;
+      explosionPositionX = 0.8;
+      explosionPositionY = 0.6;
     });
     Timer.periodic(const Duration(milliseconds: 500), (timer) {
       timer.cancel();
-      moveCharacterSpecial();
+      moveEffectSpecial(8, 150);
       setState(() {
-        specialEffect = true;
+        specialEffectVisible = true;
       });
     });
     Timer.periodic(const Duration(milliseconds: 1570), (timer) {
       timer.cancel();
       moveCharacterExplosion();
       setState(() {
-        specialEffect = false;
-        explosionEffect = true;
+        specialEffectVisible = false;
+        isExplosionVisible = true;
         defenseEnemy1 = true;
         showDamage(0.7);
       });
     });
     Timer.periodic(const Duration(milliseconds: 2200), (timer) {
       timer.cancel();
-      specialCharacterTimer.cancel();
+      specialEffectTimer.cancel();
       explosionCharacterTimer.cancel();
       specialAudio.stop();
       setState(() {
-        specialPlayer = false;
+        specialCharacterVisible = false;
         disableActionButton = false;
-        explosionEffect = false;
+        isExplosionVisible = false;
         standingPlayer1 = true;
-        specialSpriteCount = 0;
+        specialEffectSpriteCount = 0;
+        specialCharacterSpriteCount = 1;
         explosionSpriteCount = 0;
         defenseEnemy1 = false;
+      });
+    });
+  }
+
+  void enemySpecial() {
+    if (isAudioActive) {
+      specialAudio.play(AssetSource('audio/special2.ogg'));
+    }
+    setState(() {
+      direction = DirectionEnum.right;
+      specialCharacterImage = 2;
+      specialEffectImage = 2;
+      specialCharacterPositionX = 0.3;
+      specialCharacterPositionY = 0.5;
+      specialEffectPositionX = -0.6;
+      specialEffectPositionY = 0.5;
+      disableActionButton = true;
+      standingEnemy1 = false;
+      specialCharacterVisible = true;
+      explosionPositionX = -0.6;
+      explosionPositionY = 0.6;
+    });
+    Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      timer.cancel();
+      specialCharacterSpriteCount = 2;
+      moveEffectSpecial(15, 90);
+      setState(() {
+        specialEffectVisible = true;
+      });
+    });
+    Timer.periodic(const Duration(milliseconds: 1570), (timer) {
+      timer.cancel();
+      moveCharacterExplosion();
+      setState(() {
+        specialEffectVisible = false;
+        isExplosionVisible = true;
+        defensePlayer1 = true;
+        showDamage(-0.5);
+      });
+    });
+    Timer.periodic(const Duration(milliseconds: 2200), (timer) {
+      timer.cancel();
+      specialEffectTimer.cancel();
+      explosionCharacterTimer.cancel();
+      specialAudio.stop();
+      setState(() {
+        specialCharacterVisible = false;
+        disableActionButton = false;
+        isExplosionVisible = false;
+        standingEnemy1 = true;
+        specialEffectSpriteCount = 0;
+        specialCharacterSpriteCount = 1;
+        explosionSpriteCount = 0;
+        defensePlayer1 = false;
       });
     });
   }
@@ -446,21 +522,11 @@ class _BattlePageState extends State<BattlePage> {
                     auraPlayerSpriteCount: auraCharacterSpriteCount,
                     standingPlayerVisible: standingPlayer1,
                     standingPlayerSpriteCount: standingSpriteCount,
-                    specialPlayerVisible: specialPlayer,
-                    specialPlayerSpriteCount: specialCharacterSpriteCount,
-                    specialPlayerPositionX: -0.2,
-                    specialPlayerPositionY: 0.5,
-                    specialEffectImage: specialEffectImage,
-                    specialEffectVisible: specialEffect,
-                    specialEffectSpriteCount: specialSpriteCount,
-                    specialEffectPositionX: 0.7,
-                    specialEffectPositionY: 0.5,
                     defenseSpriteCount: 1,
                     defenseVisible: defensePlayer1,
                     auraVisible: auraPlayer1,
                     playerPositionX: -0.6,
                     playerPositionY: 0.6,
-                    specialPlayerImage: specialPlayerImage,
                     enemyAttackPositionX: -0.5,
                     enemyAttackPositionY: 0.6,
                     enemyAttackSpriteCount: attackSpriteCount,
@@ -478,26 +544,44 @@ class _BattlePageState extends State<BattlePage> {
                     defenseSpriteCount: defenseEnemySpriteCount,
                     standingEnemyVisible: standingEnemy1,
                     standingEnemySpriteCount: standingSpriteCount,
-                    explosionVisible: explosionEffect,
-                    explosionImage: explosionEnemyImage,
-                    explosionSpriteCount: explosionSpriteCount,
-                    explosionEnemyPositionX: 0.8,
-                    explosionEnemyPositionY: 0.6,
                     playerVisible: attackPlayer1,
                     playerImage: imageCharacter1,
                     playerAttackSpriteCount: attackSpriteCount,
                     playerAttackPositionX: 0.7,
                     playerAttackPositionY: 0.6,
-                    damageVisible: damageVisible,
-                    damagePositionX: damagePositionX,
-                    damagePositionY: damagePositionY,
-                    damage: damage,
                     enemyPositionX: 0.8,
                     enemyPositionY: 0.6,
                     auraEffectImage: auraEffectImage,
                     auraEffectSpriteCount: standingSpriteCount,
                     auraEnemySpriteCount: auraCharacterSpriteCount,
                     auraVisible: auraEnemy1,
+                  ),
+                  Special(
+                    direction: direction,
+                    specialCharacterVisible: specialCharacterVisible,
+                    specialCharacterPositionX: specialCharacterPositionX,
+                    specialCharacterPositionY: specialCharacterPositionY,
+                    specialCharacterImage: specialCharacterImage,
+                    specialCharacterSpriteCount: specialCharacterSpriteCount,
+                    specialEffectVisible: specialEffectVisible,
+                    specialEffectPositionX: specialEffectPositionX,
+                    specialEffectPositionY: specialEffectPositionY,
+                    specialEffectImage: specialEffectImage,
+                    specialEffectSpriteCount: specialEffectSpriteCount,
+                  ),
+                  ExplosionCharacter(
+                    isVisible: isExplosionVisible,
+                    direction: direction,
+                    positionX: explosionPositionX,
+                    positionY: explosionPositionY,
+                    image: explosionImage,
+                    spriteCount: explosionSpriteCount,
+                  ),
+                  Damage(
+                    isVisible: damageVisible,
+                    positionX: damagePositionX,
+                    positionY: damagePositionY,
+                    damage: damage,
                   ),
                 ],
               ),
@@ -554,7 +638,7 @@ class _BattlePageState extends State<BattlePage> {
                                 ),
                                 Button(
                                   title: 'Special enemy',
-                                  callback: () {},
+                                  callback: enemySpecial,
                                   disableActionButton: disableActionButton,
                                 ),
                               ],

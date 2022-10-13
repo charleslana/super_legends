@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:super_legends/components/aura.dart';
 import 'package:super_legends/components/character.dart';
-import 'package:super_legends/components/skill.dart';
 import 'package:super_legends/enums/direction_enum.dart';
 import 'package:super_legends/enums/move_enum.dart';
 
@@ -14,21 +13,11 @@ class Player extends StatelessWidget {
     required this.auraPlayerSpriteCount,
     required this.standingPlayerVisible,
     required this.standingPlayerSpriteCount,
-    required this.specialPlayerVisible,
-    required this.specialPlayerSpriteCount,
-    required this.specialPlayerPositionX,
-    required this.specialPlayerPositionY,
-    required this.specialEffectImage,
-    required this.specialEffectVisible,
-    required this.specialEffectSpriteCount,
-    required this.specialEffectPositionX,
-    required this.specialEffectPositionY,
     required this.defenseVisible,
     required this.defenseSpriteCount,
     required this.playerPositionX,
     required this.playerPositionY,
     required this.auraVisible,
-    required this.specialPlayerImage,
     required this.enemyVisible,
     required this.enemyAttackPositionX,
     required this.enemyAttackPositionY,
@@ -42,21 +31,11 @@ class Player extends StatelessWidget {
   final int auraPlayerSpriteCount;
   final bool standingPlayerVisible;
   final int standingPlayerSpriteCount;
-  final bool specialPlayerVisible;
-  final int specialPlayerSpriteCount;
-  final double specialPlayerPositionX;
-  final double specialPlayerPositionY;
-  final int specialEffectImage;
-  final bool specialEffectVisible;
-  final int specialEffectSpriteCount;
-  final double specialEffectPositionX;
-  final double specialEffectPositionY;
   final bool defenseVisible;
   final int defenseSpriteCount;
   final double playerPositionX;
   final double playerPositionY;
   final bool auraVisible;
-  final int specialPlayerImage;
   final bool enemyVisible;
   final double enemyAttackPositionX;
   final double enemyAttackPositionY;
@@ -131,41 +110,6 @@ class Player extends StatelessWidget {
               direction: DirectionEnum.left,
               move: MoveEnum.defense,
               spriteCount: defenseSpriteCount,
-            ),
-          ),
-        ),
-        /*
-        #######################################
-        ############ SPECIAL PLAYER ###########
-        #######################################
-        */
-        Visibility(
-          visible: specialPlayerVisible,
-          child: Container(
-            alignment:
-                Alignment(specialPlayerPositionX, specialPlayerPositionY),
-            child: Character(
-              image: specialPlayerImage,
-              direction: DirectionEnum.left,
-              move: MoveEnum.special,
-              spriteCount: specialPlayerSpriteCount,
-            ),
-          ),
-        ),
-        /*
-        #######################################
-        ########### SPECIAL EFFECT ############
-        #######################################
-        */
-        Visibility(
-          visible: specialEffectVisible,
-          child: Container(
-            alignment:
-                Alignment(specialEffectPositionX, specialEffectPositionY),
-            child: Skill(
-              image: specialEffectImage,
-              direction: DirectionEnum.left,
-              spriteCount: specialEffectSpriteCount,
             ),
           ),
         ),
