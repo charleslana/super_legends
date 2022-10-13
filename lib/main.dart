@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:super_legends/pages/battle_page.dart';
+import 'package:super_legends/providers/battle_provider.dart';
+import 'package:super_legends/stores/battle_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +28,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const BattlePage(),
+      home: BattleProvider(
+        notifier: BattleStore(),
+        child: const BattlePage(),
+      ),
     );
   }
 }

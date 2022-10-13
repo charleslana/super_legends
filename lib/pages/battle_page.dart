@@ -10,6 +10,7 @@ import 'package:super_legends/components/explosion_character.dart';
 import 'package:super_legends/components/player.dart';
 import 'package:super_legends/components/special.dart';
 import 'package:super_legends/enums/direction_enum.dart';
+import 'package:super_legends/providers/battle_provider.dart';
 import 'package:super_legends/utils/utils.dart';
 
 class BattlePage extends StatefulWidget {
@@ -525,6 +526,9 @@ class _BattlePageState extends State<BattlePage> {
 
   @override
   Widget build(BuildContext context) {
+    final test = BattleProvider.of(context).value;
+    print(test);
+
     return Scaffold(
       body: Column(
         children: [
