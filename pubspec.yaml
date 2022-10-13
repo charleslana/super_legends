@@ -25,11 +25,13 @@ flutter:
   assets:
     - assets/images/characters/1/
     - assets/images/characters/2/
+    - assets/images/characters/3/
 
     - assets/images/maps/
 
     - assets/images/skill/1/
     - assets/images/skill/2/
+    - assets/images/skill/3/
 
     - assets/images/aura/1/
     - assets/images/aura/2/
